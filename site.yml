@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  vars_prompt:
+  - name: target_host
+    prompt: please enter the target host IP
+    private: no
+  - name: username
+    prompt: "Enter username"
+    private: no
+  - name: password
+    prompt: "Enter password"
+    private: yes
+
+  tasks:
+    - add_host:
+        name: "{{target_host}}"
+        groups: dynamically_created_hosts
+        ansible_user: "{{username}}"
+        ansible_password: "{{password}}"
+
+- hosts: dynamically_created_hosts
+  gather_facts: no
+  tasks:
+    - name: checks
+      raw: "show ip ssh | in size"
+      register: print_output
+
+    - debug: var=print_output.stdout_lines
+
+
+

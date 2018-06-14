@@ -1,0 +1,6 @@
+---
+provider:
+  host: "{{ inventory_hostname }}"
+  username: ranjit
+  password: Oms@!shr1
+  auth_pass: Oms@!shr1

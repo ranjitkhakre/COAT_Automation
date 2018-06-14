@@ -1,0 +1,9 @@
+---
+
+tasks:
+  - name: run show version on remote devices
+    ios_command:
+      commands: show version
+      register: print_output
+
+  - debug: var=print_output.stdout_lines

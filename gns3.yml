@@ -1,0 +1,11 @@
+---
+- hosts: gns3
+  gather_facts: no
+  connection: local
+  roles:
+    - common
+    - gns3
+
+  tasks:
+  - include: roles/gns3/tasks/show_vers.yml
+  

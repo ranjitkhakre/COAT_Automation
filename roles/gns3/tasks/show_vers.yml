@@ -1,0 +1,11 @@
+---
+- name: RUN 'show verstion'
+  ios_command:
+    provider: "{{ provider }}"
+    commands:
+      - show verstion
+
+  register: show_ver
+
+- name: DEBUG 'show verstion'
+  debug: var=show_ver
