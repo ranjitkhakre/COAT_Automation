@@ -1,0 +1,26 @@
+---
+- hosts: gns3-core
+   
+  vars:
+  cli:
+    host: "{{ inventory_hostname }}"
+    username: ranjit
+    password: Oms@!shr1
+    transport: cli
+
+# Collect all facts from the device
+- ios_facts:
+    gather_subset: all
+    provider: "{{ cli }}"
+
+# Collect only the config and default facts
+- ios_facts:
+    gather_subset:
+      - config
+    provider: "{{ cli }}"
+
+# Do not collect hardware facts
+- ios_facts:
+    gather_subset:
+      - "!hardware"
+    provider: "{{ cli }}"

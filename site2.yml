@@ -19,6 +19,7 @@
         groups: dynamically_created_hosts
         ansible_user: "{{username}}"
         ansible_password: "{{password}}"
+
     
  
 - hosts: dynamically_created_hosts
