@@ -1,2 +1,12 @@
 ---
-- include: gns3.yml
+- include: login.yml
+
+- hosts: dynamically_created_hosts
+  gather_facts: no
+  connection: local
+  tasks:
+    - include: roles/cisco_ios_switch/tasks/1_02_crypto_key.yml
+    - include: roles/cisco_ios_switch/tasks/1_03_pwd_encry.yml
+    - include: roles/cisco_ios_switch/tasks/1_04_aaa_servers.yml
+    
+

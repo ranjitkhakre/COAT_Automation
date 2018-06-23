@@ -19,6 +19,7 @@
         groups: dynamically_created_hosts
         ansible_user: "{{username}}"
         ansible_password: "{{password}}"
+        anisble_become_pass: "{{password}}"
     
  
 - hosts: dynamically_created_hosts
@@ -27,7 +28,16 @@
   tasks:
     - name: run show verstion
       ios_command:
-        commands: show ip ssh | in size
-        
-      register: show_ver
+        commands: show run 
+        register: show_ver
     - debug: var=show_ver.stdout_lines
+
+
+    #- set_fact:
+    #    keysize: "{{ show_ver.stdout_lines | regex_search('2048') }}"
+      #  qry: '\[0-9]{4}$\'
+    #- debug: var=keysize.stdout_lines
+
+    
+
+

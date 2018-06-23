@@ -1,0 +1,7 @@
+---
+
+- name: Validate the crypto keys are a mininum of 1024
+  ios_command:
+    commands: show ip ssh | in size
+  register: show_crypto
+- debug: var=show_crypto.stdout_lines

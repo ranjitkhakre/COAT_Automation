@@ -1,0 +1,13 @@
+---
+
+- name: Validate the crypto keys are a mininum of 1024
+  raw: show run | in password-encryp
+  register: show_encryp
+- debug: var=show_encryp.stdout_lines
+
+#- name: Validate the Password is Encrypted
+#  ios_command:
+#    commands: show run | in password-encryp
+#  register: show_encryp
+#- debug: var=show_encryp.stdout_lines
+
