@@ -1,26 +1,39 @@
 ---
-- hosts: gns3-core
-   
-  vars:
-  cli:
-    host: "{{ inventory_hostname }}"
-    username: ranjit
-    password: Oms@!shr1
-    transport: cli
 
-# Collect all facts from the device
-- ios_facts:
-    gather_subset: all
-    provider: "{{ cli }}"
+- hosts: localhost
+  gather_facts: no
+  vars_prompt:
+  - name: target_host
+    prompt: please enter the target host IP
+    private: no
+  - name: username
+    prompt: "Enter username"
+    private: no
+  - name: password
+    prompt: "Enter password"
+    private: yes
 
-# Collect only the config and default facts
-- ios_facts:
-    gather_subset:
-      - config
-    provider: "{{ cli }}"
+  tasks:
+    - add_host:
+        name: "{{ target_host }}"
+        groups: dynamically_created_hosts
+        ansible_user: "{{username}}"
+        ansible_password: "{{password}}"
+  
+- name: show version and other user level commands
+  hosts: dynamically_created_hosts
+  gather_facts: false
+  connection: local
 
-# Do not collect hardware facts
-- ios_facts:
-    gather_subset:
-      - "!hardware"
-    provider: "{{ cli }}"
+  tasks:
+    - name: run multiple commands on remote nodes
+      ios_command:
+        commands:
+          - termi le 0
+          - show run | in password-encryption
+          - show ip ssh | in size
+
+
+      register: print_output
+
+    -  debug: var=print_output.stdout_lines[1]
