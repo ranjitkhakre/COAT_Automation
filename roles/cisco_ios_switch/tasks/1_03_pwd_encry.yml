@@ -1,13 +1,8 @@
 ---
 
-- name: Validate the crypto keys are a mininum of 1024
-  raw: show run | in password-encryp
-  register: show_encryp
-- debug: var=show_encryp.stdout_lines
+- name: 1.02 validate the crypto keys are a minium of 1024 bits
+  ios_command:
+    commands:
+      - show ip ssh | in size
 
-#- name: Validate the Password is Encrypted
-#  ios_command:
-#    commands: show run | in password-encryp
-#  register: show_encryp
-#- debug: var=show_encryp.stdout_lines
-
+  register: print_output

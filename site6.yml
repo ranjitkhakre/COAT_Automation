@@ -1,0 +1,55 @@
+---
+
+- hosts: localhost
+  gather_facts: no
+  vars_prompt:
+  - name: target_host
+    prompt: please enter the target host IP
+    private: no
+  - name: username
+    prompt: "Enter username"
+    private: no
+  - name: password
+    prompt: "Enter password"
+    private: yes
+
+  tasks:
+    - add_host:
+        name: "{{ target_host }}"
+        groups: dynamically_created_hosts
+        ansible_user: "{{username}}"
+        ansible_password: "{{password}}"
+  
+- name: show version and other user level commands
+  hosts: dynamically_created_hosts
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: 1.02 validate the crypto keys are a minium of 1024 bits
+      ios_command:
+        commands:
+          - show ip ssh | in size
+          - show run | in password-encryption
+
+      register: print_output
+
+    
+    - set_fact:
+        bitsize: "{{ print_output.stdout[0] | join('') | regex_findall(qry) }}"
+        passenc: "{{ print_output.stdout[1] | join('') | regex_findall(pas) }}"
+        
+      vars: 
+        qry: '\d{4}'
+        pas: 'service password-encryption'
+        bit: " {{bitsize}}"
+
+    - assert: { that: "{{bit}} >= 1024" }
+    - debug:
+        var: passenc
+    
+    
+
+    #- assert: { that: "{passenc} = 'service password-encryption'" }
+    
+    
